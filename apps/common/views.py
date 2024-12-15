@@ -19,6 +19,8 @@ from django.http import HttpResponseServerError
 import numpy as np
 from apps.user_profile import utils
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 
 class LoginFaceAjaxView(View):
@@ -83,8 +85,10 @@ class LoginView(auth_views.LoginView):
         return render(request, self.template_name, {'form': AuthenticationForm})
 
 
-# class LogoutView(auth_views.LogoutView):
-#     next_page = 'login'
+@login_required
+def logout_handler(request):
+    logout(request)
+    return redirect('/')
 
 
 class PasswordChangeView(auth_views.PasswordChangeView):
